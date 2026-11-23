@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+dist/
+data/*.db
+data/*.db-*
+backups/
+.env
+.DS_Store
+npm-debug.log*

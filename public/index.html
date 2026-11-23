@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f5f2">
+  <title>Ventas | Panel de gestión</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <section id="login-view" class="login-screen">
+    <div class="login-art" aria-hidden="true"><span class="art-label">CONTROL DE VENTAS</span><div class="art-chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <form id="login-form" class="login-form">
+      <div class="brand-mark">V<span>.</span></div>
+      <p class="eyebrow">SISTEMA DE GESTIÓN</p>
+      <h1>Bienvenido</h1>
+      <p class="muted">Ingresa tus credenciales para continuar.</p>
+      <label for="username">Usuario</label>
+      <input id="username" name="username" autocomplete="username" required>
+      <label for="password">Contraseña</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <p id="login-error" class="form-error" role="alert"></p>
+      <button class="button button-primary button-wide" type="submit">Iniciar sesión <span aria-hidden="true">→</span></button>
+    </form>
+  </section>
+
+  <div id="app-view" class="app-shell" hidden>
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard"><span class="brand-mark">V<span>.</span></span><span>Ventas<strong>Panel</strong></span></a>
+      <p class="nav-label">GESTIÓN</p>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span>Resumen</button>
+        <button class="nav-item" data-view="products"><span class="nav-icon">▤</span>Productos</button>
+        <button class="nav-item" data-view="new-sale"><span class="nav-icon">＋</span>Nueva venta</button>
+        <button class="nav-item" data-view="history"><span class="nav-icon">◷</span>Historial</button>
+      </nav>
+      <div class="sidebar-bottom"><div class="user-chip"><span class="avatar">A</span><span><strong id="logged-user">Admin</strong><small>Administrador</small></span></div><button id="logout-button" class="logout-button" title="Cerrar sesión" aria-label="Cerrar sesión">↗</button></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar"><div><p class="eyebrow">SISTEMA DE GESTIÓN</p><h1 id="page-title">Resumen</h1></div><time id="today-label"></time></header>
+      <p id="app-message" class="notice" role="status" hidden></p>
+
+      <section class="view active" id="view-dashboard">
+        <div class="metrics-grid">
+          <article class="metric metric-green"><span class="metric-icon">▤</span><p>Productos</p><strong id="metric-products">0</strong><small>Referencias registradas</small></article>
+          <article class="metric metric-coral"><span class="metric-icon">▣</span><p>Ventas de hoy</p><strong id="metric-sales">0</strong><small>Operaciones completadas</small></article>
+          <article class="metric metric-yellow"><span class="metric-icon">$</span><p>Ingresos de hoy</p><strong id="metric-revenue">$0.00</strong><small>Total vendido en el día</small></article>
+          <article class="metric metric-blue"><span class="metric-icon">≋</span><p>Unidades en stock</p><strong id="metric-stock">0</strong><small>Inventario disponible</small></article>
+        </div>
+        <section class="content-section"><div class="section-heading"><div><p class="eyebrow">ACTIVIDAD</p><h2>Ventas recientes</h2></div><button class="button button-quiet" data-go="history">Ver historial <span aria-hidden="true">→</span></button></div><div class="table-wrap"><table><thead><tr><th>Venta</th><th>Fecha</th><th class="align-right">Total</th></tr></thead><tbody id="recent-sales-body"></tbody></table><p id="recent-empty" class="empty-state" hidden>Aún no hay ventas registradas.</p></div></section>
+      </section>
+
+      <section class="view" id="view-products">
+        <section class="content-section"><div class="section-heading"><div><p class="eyebrow">INVENTARIO</p><h2>Catálogo de productos</h2></div></div>
+          <form id="product-form" class="product-form">
+            <input id="product-id" type="hidden">
+            <label>Nombre<input id="product-name" maxlength="120" required placeholder="Ej. Teclado inalámbrico"></label>
+            <label>Precio<input id="product-price" type="number" min="0.01" step="0.01" required placeholder="0.00"></label>
+            <label>Existencias<input id="product-stock" type="number" min="0" step="1" required placeholder="0"></label>
+            <label class="description-field">Descripción<input id="product-description" placeholder="Detalle opcional"></label>
+            <div class="form-actions"><button id="product-submit" class="button button-primary" type="submit">Guardar producto</button><button id="product-cancel" class="button button-quiet" type="button" hidden>Cancelar</button></div>
+          </form>
+          <div class="table-wrap"><table><thead><tr><th>Producto</th><th>Precio</th><th>Existencias</th><th class="align-right">Acciones</th></tr></thead><tbody id="products-body"></tbody></table><p id="products-empty" class="empty-state" hidden>No hay productos. Registra el primero arriba.</p></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-new-sale">
+        <section class="content-section sale-layout"><div class="sale-entry"><p class="eyebrow">PUNTO DE VENTA</p><h2>Registrar venta</h2>
+          <form id="cart-form" class="cart-form"><label>Producto<select id="sale-product" required></select></label><label>Cantidad<input id="sale-quantity" type="number" min="1" step="1" value="1" required></label><button class="button button-secondary" type="submit">Añadir <span aria-hidden="true">＋</span></button></form>
+          <div class="table-wrap"><table><thead><tr><th>Producto</th><th>Cantidad</th><th>Importe</th><th></th></tr></thead><tbody id="cart-body"></tbody></table><p id="cart-empty" class="empty-state">Agrega productos para iniciar.</p></div>
+        </div><aside class="sale-summary"><p class="eyebrow">RESUMEN</p><span>Total de la venta</span><strong id="cart-total">$0.00</strong><button id="complete-sale" class="button button-primary button-wide" type="button" disabled>Completar venta</button></aside></section>
+      </section>
+
+      <section class="view" id="view-history">
+        <section class="content-section"><div class="section-heading"><div><p class="eyebrow">REGISTRO</p><h2>Historial de ventas</h2></div></div><div class="table-wrap"><table><thead><tr><th>Venta</th><th>Fecha</th><th>Productos</th><th class="align-right">Total</th></tr></thead><tbody id="history-body"></tbody></table><p id="history-empty" class="empty-state" hidden>No hay ventas en el historial.</p></div></section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
